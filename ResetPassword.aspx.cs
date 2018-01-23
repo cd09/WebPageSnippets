@@ -40,8 +40,8 @@ namespace Helper_WebPortal
             {
                 byte[] expB = System.Convert.FromBase64String(Request.QueryString["exp"]);
                 expirationDate = System.Text.Encoding.UTF8.GetString(expB);
-                expirationDate = sc.Decrypt(exp);
-                //exp = "20170625055025"; //test expiration
+                expirationDate = sc.Decrypt(expirationDate);
+                //expirationDate = "20170625055025"; //test expiration
             }
             myLog.AppendLine("exp: " + exp);
             if (Request.QueryString["userid"] != null)
@@ -172,7 +172,7 @@ namespace Helper_WebPortal
                         {
                             Guid userGUID = Guid.Empty;
                             userGUID = new Guid(userid);
-                            imyLog.AppendLine("userGUID: " + userGUID.ToString());
+                            myLog.AppendLine("userGUID: " + userGUID.ToString());
                             UpdateEntity("new_userAccount", userGUID.ToString(), sc.Encrypt(TBPassword.Text), "new_password", "new_passwordencrypted", true);
                         }
                     }
