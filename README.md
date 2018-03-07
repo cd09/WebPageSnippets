@@ -1,2 +1,2 @@
 # WebPageSnippets
-Contains snippets of code implemented for professional customer web portal pages
+Contains snippets of code for web portal pages
