@@ -36,10 +36,10 @@ namespace Helper_Webportal
             }
         }
 
-        String GetGUIDbyValue(String entity, String Column, String fieldValue2Filter, String fieldName2Filter)
+        String GetRecordID(String entity, String Column, String fieldValue2Filter, String fieldName2Filter)
         {
             String myFieldValue = String.Empty;
-            myLog.AppendLine("GetGUIDbyValue()");
+            myLog.AppendLine("GetRecordID()");
             QueryExpression myQuery1 = new QueryExpression(entity);
             myQuery1.ColumnSet = new ColumnSet(new string[] { Column });
             FilterExpression myFilter1 = new FilterExpression();
@@ -59,17 +59,14 @@ namespace Helper_Webportal
             return myFieldValue;
         }
 
-        String CreateUser(String entity, String value1, String fieldName1, String value2, String fieldName2, String value3, String fieldName3, String boolFieldName3, Boolean encrypted)
+        String CreateUser(String entity, String emailValue, String passwordValue, string userNameValue, Boolean encrypted)
         {
             Entity myUser = new Entity(entity);
-            if (fieldName3 != String.Empty)
-                myUser[fieldName3] = value3;
-            if (fieldName1 != String.Empty)
-                myUser[fieldName1] = value1;
-            if (fieldName2 != String.Empty)
-                myUser[fieldName2] = value2;
-            if (encrypted && boolFieldName3 != String.Empty)
-                myUser[boolFieldName3] = true;
+            myUser["name"] = userNameValue;
+            myUser["email"] = emailValue;
+            myUser["password"] = passwordValue;
+            if (encrypted)
+                myUser["encrypted"] = true;
             Guid myUserId = service.Create(myEntity);
 
             return myUserId.ToString();
@@ -84,11 +81,10 @@ namespace Helper_Webportal
                     String ID = String.Empty;
                     if (TBPassword.Text != "" && TBEmail.Text != "" && TBConfirmPassword.Text != "")
                     {
-                        GetService();
                         sharedClass sc = new sharedClass();
                         
                         //check if User Account already exists
-                        ID = GetGUIDbyValue("new_userAccount", "new_userAccountid", TBEmail.Text.ToLower(), "new_emailaddress");
+                        ID = GetRecordID("new_userAccount", "new_userAccountid", TBEmail.Text.ToLower(), "new_emailaddress");
                         
                         if (ID != String.Empty)
                         {
@@ -97,13 +93,13 @@ namespace Helper_Webportal
                         }
                         else
                         {
-                            ID = CreateUser("new_userAccount", TBEmail.Text.ToLower(), "new_emailaddress", sc.Encrypt(TBPassword.Text), "new_password", TBName.Text, "new_name", "new_passwordencrypted", true);
+                            ID = CreateUser("new_userAccount", TBEmail.Text.ToLower(), sc.Encrypt(TBPassword.Text), TBName.Text, true);
                             LB_Error.Text += "<br> Thank you for registering";
                         }
                            myLog.AppendLine("ID: " + ID);
                     }
                     else
-                        LB_Error.Text += "<br> Fill In both User ID and Password.";
+                        LB_Error.Text += "<br>You must fill In both User ID and Password.";
 
                 if (verboseLogs) LB_Error.Text += myLog.ToString();
             }
