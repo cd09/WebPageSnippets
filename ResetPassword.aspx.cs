@@ -104,36 +104,13 @@ namespace Helper_WebPortal
             }
         }
 
-        String GetGUIDbyValue(String entity, String Column, String value1, String fieldName1)
-        {
-            String myFieldValue = String.Empty;
-            myLog.AppendLine("GetGUIDbyValue()");
-            QueryExpression myQuery1 = new QueryExpression(entity);
-            myQuery1.ColumnSet = new ColumnSet(new string[] { Column });
-            FilterExpression myFilter1 = new FilterExpression();
-            if (value1 != String.Empty)
-                myFilter1.AddCondition(new ConditionExpression(fieldName1, ConditionOperator.Equal, new Object[] { value1 }));
-            myQuery1.Criteria.AddFilter(myFilter1);
-            EntityCollection myRetrieved1 = service.RetrieveMultiple(myQuery1);
-            myLog.AppendLine("myRetrieved1.Entities.Count: " + myRetrieved1.Entities.Count);
-            if (myRetrieved1.Entities.Count > 0)
-            {
-                Entity myEntity1 = myRetrieved1.Entities[0];
-                myFieldValue = myEntity1.Attributes.Contains(Column) ? ((Guid)myEntity1.Attributes[Column]).ToString() : String.Empty;
-                myLog.AppendLine("myFieldValue: " + myFieldValue);
-
-            }
-            return myFieldValue;
-        }
-
-        void UpdateEntity(String entity, String key, String value1, String fieldName1, String boolFieldName3, Boolean encrypted)
+        void UpdateEntity(String entity, String key, String password, Boolean encrypted)
         {
             myLog.AppendLine("UpdateEntity(): " + key);
             Entity myEntityUpd = new Entity(entity);
             myEntityUpd.Id = new Guid(key);
-            if (fieldName1 != "")
-                myEntityUpd[fieldName1] = value1;
-            myEntityUpd[boolFieldName3] = encrypted;
+            myEntityUpd["password"] = password;
+            myEntityUpd["encrypted"] = encrypted;
             if (!encrypted)
                 myEntityUpd["new_resetpassword"] = true;
             else
@@ -161,8 +138,6 @@ namespace Helper_WebPortal
                 LB_Error.Text = String.Empty;
                     String ID = String.Empty;
                     sharedClass sc = new sharedClass();
-                    GetService();
-
                     
                     if (TBPassword.Text != "" && TBConfirmPassword.Text != "")
                     {
@@ -173,15 +148,15 @@ namespace Helper_WebPortal
                             Guid userGUID = Guid.Empty;
                             userGUID = new Guid(userid);
                             myLog.AppendLine("userGUID: " + userGUID.ToString());
-                            UpdateEntity("new_userAccount", userGUID.ToString(), sc.Encrypt(TBPassword.Text), "new_password", "new_passwordencrypted", true);
+                            UpdateEntity("new_userAccount", userGUID.ToString(), sc.Encrypt(TBPassword.Text), true);
                         }
                     }
                     else if (TBEmail.Text != "")
                     {
-                        ID = GetGUIDbyValue("new_userAccount", "new_userAccountid", TBEmail.Text.ToLower(), "new_emailaddress");
+                        ID = GetRecordID("new_userAccount", "new_userAccountid", TBEmail.Text.ToLower(), "new_emailaddress");
                         if (ID != String.Empty)
                         {
-                            UpdateEntity("new_userAccount", ID, "", "", "new_passwordencrypted", false);
+                            UpdateEntity("new_userAccount", ID, "", false);
                         }
                         else
                         {
