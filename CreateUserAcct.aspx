@@ -2,8 +2,6 @@
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="ajaxToolkit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-      <asp:ScriptManager ID="ScriptManager1" runat="server">
-    </asp:ScriptManager>
     <div class="title">
     <h1>
         <%= Page.Title%>
@@ -16,7 +14,7 @@
             <td>
                 <asp:TextBox ID="TBName" runat="server"  Width="250px" TabIndex="1"></asp:TextBox>
             </td>
-                 </tr>
+            </tr>
         <tr>
             <td class="lblStyle">
                 Email Address</td>
@@ -24,7 +22,7 @@
                 <asp:TextBox ID="TBEmail" runat="server"  Width="250px" TabIndex="2"></asp:TextBox>
             </td>
             <td>
-               <asp:RequiredFieldValidator id="RequiredFieldValidator1"
+               <asp:RequiredFieldValidator id="RequiredFieldValidatorEmail"
                     ControlToValidate="TBEmail"
                     Display="Static"
                     ErrorMessage="*"
@@ -42,23 +40,19 @@
     TargetControlID="TBPassword"
     DisplayPosition="RightSide"
     StrengthIndicatorType="Text"
-    PrefixText=""
     Enabled="true"
     PreferredPasswordLength="10"
     MinimumNumericCharacters="1"
     MinimumSymbolCharacters="1"
     RequiresUpperAndLowerCaseCharacters="true"
-    MinimumLowerCaseCharacters="1" MinimumUpperCaseCharacters="1"      
-                         
-    TextStrengthDescriptions="▓ ;▓ ▓ ▓ ;▓ ▓ ▓ ▓ ▓ ;▓ ▓ ▓ ▓ ▓ ▓ ; ▓ ▓ ▓ ▓ ▓ ▓ ▓ ▓ "
+    MinimumLowerCaseCharacters="1" MinimumUpperCaseCharacters="1"     
     CalculationWeightings="50;15;15;20" 
                     TextCssClass="text"
-                    TextStrengthDescriptionStyles="Weak;Weak2;Average;Average2;Strong"
-                    HelpStatusLabelID="Label1"        
+                    TextStrengthDescriptionStyles="Weak;Weak2;Average;Average2;Strong"       
                     />
                 </td>
             <td>
-               <asp:RequiredFieldValidator id="RequiredFieldValidator2"
+               <asp:RequiredFieldValidator id="RequiredFieldValidatorPassword"
                     ControlToValidate="TBPassword"
                     Display="Static"
                     ErrorMessage="*"
@@ -75,7 +69,7 @@
                      TextMode="Password" Width="250px" TabIndex="4"></asp:TextBox>
             </td>
            <td>
-               <asp:RequiredFieldValidator id="RequiredFieldValidator3"
+               <asp:RequiredFieldValidator id="RequiredFieldValidatorConfirmPassword"
                     ControlToValidate="TBConfirmPassword"
                     Display="Static"
                     ErrorMessage="*"
@@ -100,7 +94,7 @@
             <td></td>
             <td class="lblStyle">
                 <asp:Button ID="CreateUserBtn" runat="server" onclick="CreateUserBtn_Click" Text="Register" 
-                    BackColor="#FF6600" BorderColor="Black" BorderStyle="Solid" Font-Bold="True" ForeColor="White"
+                    BackColor="White" BorderColor="Black" BorderStyle="Solid" Font-Bold="True" ForeColor="White"
                     Width="260px" />
             </td>       
         </tr>
